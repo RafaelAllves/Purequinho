@@ -1,10 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Button, ScrollView, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, Button, ScrollView, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import DrawerButton from '../Components/DrawerButton';
 
 export default function Information(props) {
   return (
     <ScrollView>
       <View style={styles.container}>
+        <DrawerButton props={props}/>
         <View style={styles.Image}>
           <Image
             source={require('../Asserts/Imgs/commitment.png')}
@@ -94,6 +96,14 @@ const styles = StyleSheet.create({
     minHeight: 50,
     width: '100%',
     maxWidth: 400,
+  },
+  Drawer: {
+    margin: 15,
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    height: 30,
+    width: 30,
   },
 });
 
