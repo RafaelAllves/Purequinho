@@ -1,14 +1,11 @@
 import React from 'react';
 import {Text, TextInput, View, StyleSheet, Image, Button} from 'react-native';
 import firebaseImpl from '../Configs/FireBase';
+import firebase from 'firebase';
 
 export default class Perfil extends React.Component {
   handleLogOut = () => {
-    firebaseImpl.firestore().collection('users').add({
-      value: 10,
-      Date: 50,
-    });
-
+    firebase.auth().signOut();
   };
   render() {
     var user = firebaseImpl.auth().currentUser;

@@ -36,12 +36,12 @@ export default class SignUp extends React.Component {
               displayName: name,
             })
             .then(function() {
-              const userDoc = firebaseImpl.auth().currentUser.uid;
+              const userID = firebaseImpl.auth().currentUser.uid;
               const user = firebaseImpl.auth().currentUser;
               firebaseImpl
                 .firestore()
                 .collection('users')
-                .doc(userDoc)
+                .doc(userID)
                 .set({
                   name: `${user.displayName}`,
                 });
@@ -49,13 +49,6 @@ export default class SignUp extends React.Component {
             .then(function() {
               () => this.props.navigation.navigate('App');
             });
-          /*
-          const userDoc = firebaseImpl.auth().currentUser.uid;
-          firebaseImpl.firestore().collection('users').doc(userDoc).set({
-            name: `${newName}`,
-          });
-          firebaseImpl.firestore().collection('users').doc(userDoc).collection('OSDI').set();
-          */
         })
         .catch(error => this.setState({errorMessage: error.message}));
     } else {

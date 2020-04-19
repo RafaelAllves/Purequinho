@@ -1,37 +1,29 @@
 import React from 'react';
-import {StyleSheet, Text, Image, View, Button, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, Image, View, Button, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import Card from '../Components/Card';
 import DrawerButton from '../Components/DrawerButton';
 import firebaseImpl from '../Configs/FireBase';
 import * as firebase from 'firebase';
 
+function test(){
+  const userID = firebaseImpl.auth().currentUser.uid;
+  const ref = firebaseImpl.firestore().collection('users').doc(userID);
+  ref.collection('FaxinasAgendadas').add({
+    Dia: '17',
+    Mes: 'Mar',
+    Ano: '2020',
+    Hora: '15:00',
+    CEP: '13083590',
+    Rua: 'Roxo Moreira',
+    Numero: '797',
+    Complemento: 'Apto 05',
+    Preço: 'R$ 80,00',
+    Faxineira: 'Hinata',
+  })
+}
+
+
 export default function HomeScreen(props) {
-  const List = [
-    {
-      Hour: '15:10 ',
-      Date: '26 Abr ',
-      Day: 'Seg ',
-      Adress: 'Rua Roxo Moreira, 797',
-      Price: 'R$ 80,00',
-      UrlPhoto: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
-    },
-    {
-      Hour: '16:10 ',
-      Date: '26 Abr ',
-      Day: 'Seg ',
-      Adress: 'Rua Roxo Moreira, 797',
-      Price: 'R$ 80,00',
-      UrlPhoto: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
-    },
-    {
-      Hour: '15:10 ',
-      Date: '26 Abr ',
-      Day: 'Seg ',
-      Adress: 'Rua Roxo Moreira, 797',
-      Price: 'R$ 80,00',
-      UrlPhoto: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -43,11 +35,11 @@ export default function HomeScreen(props) {
       <View style={{width: '80%', height: 1, backgroundColor: '#c6c6c6'}}></View>
       <ScrollView style={styles.Scroll}>
         <View style={{alignItems:'center', paddingBottom: 10,}}>
-          <Card pass={List} />
+          <Card />
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.New} onPress={console.log('tst')}>
-        <Text style={{textAlign:'center', color: 'white'}}>testFire</Text>
+      <TouchableOpacity style={styles.New} onPress={test}>
+        <Text style={{textAlign:'center', color: 'white'}}>test</Text>
       </TouchableOpacity>
     </View>
   );

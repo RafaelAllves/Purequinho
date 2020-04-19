@@ -9,9 +9,7 @@ import {YellowBox} from 'react-native';
 import 'react-native-gesture-handler';
 
 
-YellowBox.ignoreWarnings([
-  'Warning:'
-]);
+console.disableYellowBox = true;
 
 
 AppRegistry.registerComponent(appName, () => Routs);
