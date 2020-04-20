@@ -19,7 +19,7 @@ import SignUp from '../Auth/SignUp'
 
 import HomeScreen from '../App/HomeScreen';
 import InformationScreen from '../App/InformationScreen';
-import MapScreen from '../App/Maps';
+import ScheduleScreen from '../App/ScheduleScreen';
 import Address from '../App/Address';
 import Perfil from '../Components/Perfil';
 
@@ -70,7 +70,7 @@ function MyDrawer(pass) {
   const Drawer = createDrawerNavigator();
   return (
     <Drawer.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="Schedule"
       drawerType="front"
       drawerContentOptions={{
         activeTintColor: '#c6c6c6',
@@ -84,9 +84,9 @@ function MyDrawer(pass) {
           drawerIcon: () => <Logo />,
         }}
       />
-      <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+      <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Information" component={InformationScreen} />
-      <Drawer.Screen name="Maps" component={MapScreen} />
+      <Drawer.Screen name="Schedule" component={ScheduleScreen} />
       <Drawer.Screen name="Address" component={Address} />
     </Drawer.Navigator>
   );

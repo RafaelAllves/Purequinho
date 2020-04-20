@@ -1,12 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Platform} from 'react-native';
 import { Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import opencage from 'opencage-api-client';
 import firebaseImpl from '../Configs/FireBase';
-import * as firebase from 'firebase';
+import Picker from '../Components/Picker';
 
 
-export default class Maps2 extends React.Component {
+
+export default class ScheduleScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,53 +18,95 @@ export default class Maps2 extends React.Component {
       addressResult: '',
       geocoding: false,
       Aux: ', campinas',
+      RegisteredStreet: '',
+      RegisteredNumber: '',
+      RegisteredComplement: '',
+      ScheduleMonth: '', //listDate[1]
+      ScheduleDay: '', //listDate[2]
+      ScheduleYear: '', //listDate[3]
+      ScheduleHour: '', //listDate[4]
     };
-  }
 
-  //bounds:{ -47.34558, -23.11763, -46.77704, -22.70526}
+    this.setFunction = this.setFunction.bind(this);
+    
+    
+    
+    const userID = firebaseImpl.auth().currentUser.uid;
+    
+    firebaseImpl.firestore().collection('users').doc(userID).get().then(
+      doc => (
+        this.setState({
+          RegisteredStreet: doc.data().Rua,
+          RegisteredNumber: doc.data().Numero,
+          RegisteredComplement: doc.data().Complemento,
+        })
+        )
+        )
+  }
+      
+      
+      
+      
+  setFunction(key, Value,) {
+    this.setState({
+      [key]: `${Value}`,
+    });
+  }
+  
   reverseGeocode = () => {
     this.setState({address: this.state.street + ' , ' + this.state.number + this.state.Aux});
     const key = '9e549acc029c47299319f3d69de6cdf8';
     this.setState({geocoding: true});
     opencage
-      .geocode({
-        key,
-        q: this.state.street + ' , ' + this.state.number + this.state.Aux,
-      })
-      .then(response => {
-        var result = response.results[0];
-        console.log(result.formatted);
-        console.log(result.geometry);
-        console.log(result.geometry.lat);
-        this.setState({addressResult: result.formatted, geocoding: false});
-      });
+    .geocode({
+      key,
+      q: this.state.street + ' , ' + this.state.number + this.state.Aux,
+    })
+    .then(response => {
+      var result = response.results[0];
+      console.log(result.formatted);
+      console.log(result.geometry);
+      console.log(result.geometry.lat);
+      this.setState({addressResult: result.formatted, geocoding: false});
+    });
   };
-  testFire() {
-    firebase
-      .firestore()
-      .collection('users')
-      .add({
-        name: 'Los Angeles',
-        state: 'CA',
-        country: 'USA',
-      })
-      .then(console.log('foi'))
-      .catch(error => console.log(error.message));
-  }
-
+  
+  
+  NewCleaning = () => {
+    const userID = firebaseImpl.auth().currentUser.uid;
+    const ref = firebaseImpl.firestore().collection('users').doc(userID);
+    ref.collection('FaxinasAgendadas').add({
+      Dia: this.state.ScheduleDay,
+      Mes: this.state.ScheduleMonth,
+      Ano: this.state.ScheduleYear,
+      Hora: this.state.ScheduleHour,
+      CEP: '13083590',
+      Rua: 'Roxo Moreira',
+      Numero: '797',
+      Complemento: 'Apto 05',
+      Preço: 'R$ 80,00',
+      Faxineira: 'Hinata',
+    })
+  };
+  
   render() {
+
     return (
       <View style={styles.Container}>
-        <View style={styles.ContainerTextImput}>
+        <View style={styles.ContainerImput}>
           <View style={styles.ContainerStreetNumber}>
             <TextInput
-              autoCapitalize="none"
+              autoCapitalize= "sentences"
+              autoCompleteType= 'street-address'
+              defaultValue= {this.state.RegisteredStreet}
+              editable = {true}
               style={styles.TextInputStreet}
               placeholder="Rua"
               onChangeText={street => this.setState({street})}
             />
             <TextInput
               autoCapitalize="none"
+              defaultValue= {this.state.RegisteredNumber}
               style={styles.TextInputNumber}
               placeholder="Nº"
               onChangeText={number => this.setState({number})}
@@ -71,26 +114,31 @@ export default class Maps2 extends React.Component {
           </View>
           <TextInput
             autoCapitalize="none"
+            defaultValue= {this.state.RegisteredComplement}
             style={styles.TextInputComplement}
             placeholder="Complemento"
             onChangeText={complemet => this.setState({complemet})}
           />
+        </View>
+
+        <Picker setFunction={this.setFunction}/>
+
+
           <TouchableOpacity
-            style={styles.New}
+            style={styles.Button}
             onPress={this.reverseGeocode}>
             <Text style={{textAlign:'center', color: 'white'}}>{this.state.geocoding ? "Buscando..." : "Buscar"}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.New}
-            onPress={() => this.props.navigation.navigate('HomeScreen')}>
+            style={styles.Button}
+            onPress={() => this.props.navigation.navigate('Home')}>
             <Text style={{textAlign:'center', color: 'white'}}>Voltar</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.New}
-            onPress={this.testFire}>
-            <Text style={{textAlign:'center', color: 'white'}}>testFire</Text>
+            style={styles.Button}
+            onPress={this.NewCleaning}>
+            <Text style={{textAlign:'center', color: 'white'}}>pick</Text>
           </TouchableOpacity>
-        </View>
         <Text style={styles.result}>{this.state.addressResult}</Text>
 
       </View>
@@ -99,52 +147,33 @@ export default class Maps2 extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 30,
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    width: '80%',
-  },
-  button: {
-    backgroundColor: '#1E88E5',
-    width: 180,
-    margin: 10,
-  },
-  result: {
-    padding: 10,
-  },
-  textInput: {
-    marginTop: 8,
-    backgroundColor: '#ffffff',
-    borderColor: '#CCC',
-    borderRadius: 10,
-    borderWidth: 1,
-    height: 40,
-    width: '60%',
-    opacity: 0.8,
-  },
   Container: {
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     height: '100%',
   },
-
+  ContainerImput: {
+    alignItems: 'center',
+    backgroundColor: 'red',
+    marginHorizontal: 20,
+    width: '85%',
+  },
+  
+  ContainerStreetNumber: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'pink',
+    width: '100%',
+  },
   TextInputStreet: {
     borderColor: '#002233',
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: '60%',
+    width: '70%',
     opacity: 0.8,
-    marginRight: '5%',
   },
   TextInputNumber: {
     borderColor: '#002233',
@@ -159,25 +188,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: '80%',
+    width: '100%',
     opacity: 0.8,
     marginTop: 15,
+    backgroundColor: 'green'
   },
-  ContainerTextImput: {
-    alignItems: 'center',
-  },
-  ContainerStreetNumber: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  New: {
+  Button: {
     height: 38,
     width: '45%',
     backgroundColor: '#1F8DCD',
     borderRadius: 10,
     justifyContent: 'center',
     marginTop: 10,
+  },
+  result: {
+    padding: 10,
   },
 });
 

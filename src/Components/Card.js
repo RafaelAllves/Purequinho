@@ -3,73 +3,42 @@ import {Text, TextInput, View, StyleSheet, Image, Button, Alert, TouchableOpacit
 import firebaseImpl from '../Configs/FireBase';
 import { State } from 'react-native-gesture-handler';
 
-function Logo() {
-  return (
-    <Image
-      source={{
-        uri: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
-      }}
-      style={styles.Image}
-    />
-  );
-}
-/*
+export default function Card () {
 
-
-return firebaseImpl.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
+  const userID = firebaseImpl.auth().currentUser.uid;
+  const [cleanings, setcleanings] = useState([]);
+    let cleaning = [];
+    firebaseImpl.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        return (
-          <TouchableOpacity
-            style={styles.container}
-            onPress={() => Alert.alert('Informações Detalhadas')}
-          >
-            <View style={styles.containerInf}>
-              <Text style={styles.Title}>{doc.data().Faxineira}</Text>
-              <Text>{doc.data().Faxineira}</Text>
-              <Text>{doc.data().Faxineira}</Text>
-            </View>
-            <Logo />
-          </TouchableOpacity>
-        );
+        // doc.data() is never undefined for query doc snapshots
+        cleaning.push(doc.data());
+        setcleanings([...cleaning]);
       });
     });
 
-*/
 
 
-
-
-export default function Card () {
-
-      const userID = firebaseImpl.auth().currentUser.uid;
-      const [cleanings, setcleanings] = useState([]);
-        let cleaning = [];
-        firebaseImpl.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            cleaning.push(doc.data());
-            setcleanings([...cleaning]);
-          });
-        });
-
-
-
-      return cleanings.map(element => {
-        const Schedule = element.Dia + ' '+ element.Mes + ' ' + element.Hora;
-        return (
-        <TouchableOpacity
-          style={styles.container}
-          onPress={() => Alert.alert('Informações Detalhadas')}
-        >
-          <View style={styles.containerInf}>
-            <Text style={styles.Title}>{Schedule}</Text>
-            <Text>{element.Rua}</Text>
-            <Text>{element.Preço}</Text>
-          </View>
-          <Logo />
-        </TouchableOpacity>
-      );
-    });
+  return cleanings.map(element => {
+    const Schedule = element.Dia + ' ' + element.Mes + ' ' + element.Hora;
+    return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => Alert.alert('Informações Detalhadas')}
+    >
+      <View style={styles.containerInf}>
+        <Text style={styles.Title}>{Schedule}</Text>
+        <Text>{element.Rua + ', ' + element.Numero}</Text>
+        <Text>{element.Preço}</Text>
+      </View>
+      <Image
+        source={{
+          uri: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
+        }}
+        style={styles.Image}
+      />
+    </TouchableOpacity>
+  );
+});
 }
 
 const styles = StyleSheet.create({
