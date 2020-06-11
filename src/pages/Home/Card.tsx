@@ -1,0 +1,72 @@
+import React, { useState, useEffect } from 'react';
+import {Text, TextInput, View, StyleSheet, Image, Button, Alert, TouchableOpacity} from 'react-native';
+
+export default function Card () {
+
+  // const userID = firebaseImpl.auth().currentUser.uid;
+  // const [cleanings, setcleanings] = useState([]);
+  //   let cleaning = [];
+  //   firebaseImpl.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
+  //     querySnapshot.forEach(function(doc) {
+  //       // doc.data() is never undefined for query doc snapshots
+  //       cleaning.push(doc.data());
+  //       setcleanings([...cleaning]);
+  //     });
+  //   });
+
+
+
+    return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => Alert.alert('Informações Detalhadas')}
+    >
+      <View style={styles.containerInf}>
+        <Text style={styles.Title}>Ter 17 mar, 09:15</Text>
+        <Text>endereço</Text>
+        <Text>preço</Text>
+      </View>
+      <Image
+        source={{
+          uri: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
+        }}
+        style={styles.Image}
+      />
+    </TouchableOpacity>
+  );
+}
+
+const styles = StyleSheet.create({
+  Title: {
+    fontSize: 22,
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    marginVertical: 8,
+    justifyContent: 'space-between',
+    width: '95%',
+    height: 120,
+    backgroundColor: 'rgba(236, 236, 236, 1)',
+    borderRadius: 15,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  containerInf: {
+    marginHorizontal: 15,
+  },
+  Image: {
+    width: 70,
+    height: 70,
+    marginRight: 20,
+    borderRadius: 50,
+  },
+});
