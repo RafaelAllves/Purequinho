@@ -10,7 +10,8 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import Home from './pages/Home';
-import Schedule from './pages/Schedule';
+import Location from './pages/Location';
+import ConfirmLocation from './pages/ConfirmLocation';
 import Informations from './pages/Informations';
 
 import Loading from './Auth/Loading';
@@ -76,7 +77,8 @@ const RouteDrawer = () => {
         />
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Informations" component={Informations} />
-        <Drawer.Screen name="Schedule" component={Schedule} />
+        <Drawer.Screen name="Location" component={Location} />
+        <Drawer.Screen name="ConfirmLocation" component={ConfirmLocation} />
       </Drawer.Navigator>
   );
 }
