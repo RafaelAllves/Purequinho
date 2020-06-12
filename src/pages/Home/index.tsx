@@ -9,8 +9,8 @@ import Card from './Card';
 const Home = () => {
   const navigation = useNavigation();
 
-  function handlerNavigateToSchedule() {
-    navigation.navigate('Schedule');
+  function handlerNavigateToLocation() {
+    navigation.navigate('Location');
   }
 
 
@@ -25,13 +25,10 @@ const Home = () => {
         <ScrollView style={{width: '100%'}}>
           <View style={{alignItems:'center', paddingBottom: 10,}}>
           <Card />
-          <Card />
-          <Card />
-
           </View>
         </ScrollView>
         <View style={{width: '80%', height: 1, backgroundColor: '#c6c6c6'}}></View>
-        <RectButton style={styles.button} onPress={handlerNavigateToSchedule}>
+        <RectButton style={styles.button} onPress={handlerNavigateToLocation}>
           <View style={styles.buttonIcon}>
             <Text>
               <Icon name="arrow-right" color="#FFF" size={24} />
