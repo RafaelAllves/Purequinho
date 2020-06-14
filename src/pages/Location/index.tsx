@@ -8,14 +8,6 @@ import { RectButton } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
-interface Params {
-  uf: string;
-  city: string;
-}
-
-
-
-
 const Points = () => {
   const [position, setPosition] = useState<[number, number]>([-23.543845, -46.3007242])
   const [number, setNumber] = useState()
@@ -61,10 +53,12 @@ const Points = () => {
 
   function handleNavigateBack() {
     navigation.goBack();
+    console.log('go back');
   }
 
   function handlerNavigateToConfirmLocation() {
     navigation.navigate('ConfirmLocation');
+    console.log('navigate to confirmLocation');
   }
 
   return (

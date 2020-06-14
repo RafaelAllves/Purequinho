@@ -11,9 +11,8 @@ const Home = () => {
 
   function handlerNavigateToLocation() {
     navigation.navigate('Location');
+    console.log('navegate to locationScreen');
   }
-
-
 
   return (
       <View style={styles.container}>

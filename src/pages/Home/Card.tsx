@@ -17,43 +17,45 @@ import firebase from 'firebase';
 // }
 
 
-const Card = (): any => {
-
-  const userID = firebase.auth().currentUser?.uid;
-  const [cleanings, setCleanings] = useState<firebase.firestore.DocumentData[]>([]);
-  let cleaning: firebase.firestore.DocumentData[] = [];
-  firebase.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
-    console.log('doc');
-    querySnapshot.forEach(function(doc) {
-      // doc.data() is never undefined for query doc snapshots
-      cleaning.push(doc.data());
-      setCleanings([...cleaning]);
+const Card = () => {
+    console.log('render');
+    
+    const [cleanings, setCleanings] = useState<any>([]);
+    
+    useEffect(()=>{
+      const userID = firebase.auth().currentUser?.uid;
+      let cleaning: any = [];
+      firebase.firestore().collection("users").doc(userID).collection('FaxinasAgendadas').get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          cleaning.push(doc.data());
+          setCleanings([...cleaning]);
+        });
       });
+    }, [])
+    
+    return cleanings.map((element:any, index:any) => {
+      const Schedule = element.Dia + ' ' + element.Mes + ' ' + element.Hora;
+      return (
+        <TouchableOpacity
+          style={styles.container}
+          onPress={() => Alert.alert('Informações Detalhadas')}
+          key={index}
+          >
+          <View style={styles.containerInf}>
+            <Text style={styles.Title}>{Schedule}</Text>
+            <Text>{element.Rua + ', ' + element.Numero}</Text>
+            <Text>{element.Preço}</Text>
+          </View>
+          <Image
+            source={{
+              uri: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
+            }}
+            style={styles.Image}
+            />
+        </TouchableOpacity>
+      );
     });
-
-
-  return cleanings.map(element => {
-    const Schedule = element.Dia + ' ' + element.Mes + ' ' + element.Hora;
-    return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => Alert.alert('Informações Detalhadas')}
-        key={element.Numero}
-      >
-        <View style={styles.containerInf}>
-          <Text style={styles.Title}>{Schedule}</Text>
-          <Text>{element.Rua + ', ' + element.Numero}</Text>
-          <Text>{element.Preço}</Text>
-        </View>
-        <Image
-          source={{
-            uri: 'https://images.unsplash.com/photo-1511587477373-0e3e105ed675?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'
-          }}
-          style={styles.Image}
-        />
-      </TouchableOpacity>
-    );
-  });
 }
 
 const styles = StyleSheet.create({

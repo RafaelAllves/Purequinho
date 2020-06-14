@@ -21,6 +21,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import CleaningType from './CleaningType';
+import PickerSel from './Pickers';
 
 const ConfirmLocation = () => {
   const [position, setPosition] = useState<[number, number]>([-23.543845, -46.3007242])
@@ -85,6 +86,7 @@ const ConfirmLocation = () => {
         placeholder="Complemento"
       />
       <CleaningType/>
+      <PickerSel/>
       <RectButton style={styles.button} onPress={handleNavigateHome}>
         <Text style={styles.buttonText}>
           Confirmar Faxina
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
 
   mapContainer: {
     width: '100%',
-    height: '40%',
+    height: '30%',
     borderRadius: 10,
     overflow: 'hidden',
     alignItems: 'center',
